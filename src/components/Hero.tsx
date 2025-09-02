@@ -1,138 +1,171 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, Variants } from 'framer-motion';
+import { useState } from 'react';
 import VerticalLines from './VerticalLines';
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut",
+    },
+  },
+};
+
+const buttonVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      delay: 1.2,
+    },
+  },
+};
 
 export default function Hero() {
   const [videoLoaded, setVideoLoaded] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-    };
-    
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
+  const [videoError, setVideoError] = useState(false);
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video/Image */}
-      <div className="absolute inset-0 z-0">
-        {!prefersReducedMotion ? (
-          <>
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/media/cow.jpg"
-              className="absolute inset-0 w-full h-full object-cover"
-              onCanPlay={() => setVideoLoaded(true)}
-              onError={() => setVideoLoaded(false)}
-            >
-              <source src="/media/cow.mp4" type="video/mp4" />
-            </video>
-            {!videoLoaded && (
-              <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-green-800 to-green-700" />
-            )}
-          </>
+    <section 
+      id="hero" 
+      className="relative min-h-screen overflow-hidden flex items-center justify-start"
+    >
+      {/* Background Video */}
+      <div className="absolute inset-0">
+        {!videoError ? (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/media/hero-poster.jpg"
+            className="absolute inset-0 w-full h-full object-cover"
+            onLoadStart={() => setVideoLoaded(false)}
+            onCanPlay={() => setVideoLoaded(true)}
+            onError={() => setVideoError(true)}
+          >
+            <source src="/media/hero.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         ) : (
+          // Fallback gradient when video fails to load
           <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-green-800 to-green-700" />
         )}
         
-        {/* Gradient overlays for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-        <div className="absolute inset-0 bg-black/35" />
+        {/* Dark overlay for text contrast using CSS variables */}
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            background: `linear-gradient(to top, var(--color-overlay-strong), var(--color-overlay), transparent)`
+          }}
+        />
+        <div 
+          className="absolute inset-0"
+          style={{ backgroundColor: 'var(--color-overlay)' }}
+        />
       </div>
 
-      {/* Vertical Lines Overlay */}
+      {/* Vertical Guide Lines */}
       <VerticalLines />
 
-      {/* Content */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-screen">
-          {/* Hero Headlines - Left side */}
-          <motion.div
-            className="lg:col-span-7 flex flex-col justify-center"
+      {/* Content Container */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start min-h-screen pt-24 lg:pt-32">
+          
+          {/* Hero Headlines - Left/Center */}
+          <motion.div 
+            className="lg:col-span-2 flex flex-col justify-center min-h-[50vh] lg:min-h-[60vh]"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            <div className="space-y-2 mb-12">
-              {['Hack.', 'Seek.', 'Cultivate.'].map((word) => (
-                <motion.h1
-                  key={word}
-                  variants={itemVariants}
-                  className="text-[clamp(2.75rem,6vw,7rem)] leading-[0.95] font-extrabold tracking-tight text-balance"
-                  style={{ fontFamily: 'var(--font-inter)' }}
-                >
-                  {word}
-                </motion.h1>
-              ))}
+            <div className="space-y-2 lg:space-y-4">
+              <motion.h1 
+                variants={itemVariants}
+                className="font-extrabold tracking-tight text-white"
+                style={{ 
+                  fontSize: 'var(--font-size-hero)',
+                  lineHeight: 'var(--line-height-hero)'
+                }}
+              >
+                Hack.
+              </motion.h1>
+              <motion.h1 
+                variants={itemVariants}
+                className="font-extrabold tracking-tight text-white"
+                style={{ 
+                  fontSize: 'var(--font-size-hero)',
+                  lineHeight: 'var(--line-height-hero)'
+                }}
+              >
+                Seek.
+              </motion.h1>
+              <motion.h1 
+                variants={itemVariants}
+                className="font-extrabold tracking-tight text-white"
+                style={{ 
+                  fontSize: 'var(--font-size-hero)',
+                  lineHeight: 'var(--line-height-hero)'
+                }}
+              >
+                Cultivate.
+              </motion.h1>
             </div>
 
             {/* CTA Buttons */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4"
+            <motion.div 
+              variants={buttonVariants}
+              className="flex flex-col sm:flex-row gap-4 mt-8 lg:mt-12"
             >
-              <button
-                onClick={() => scrollToSection('about')}
-                className="bg-white text-black px-8 py-4 font-semibold text-lg hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black rounded-full"
+              <a
+                href="#about"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-lg hover:bg-neutral-200 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
               >
                 Register Now
-              </button>
-              <button
-                onClick={() => scrollToSection('theme')}
-                className="border border-white/70 text-white px-8 py-4 font-semibold text-lg hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black rounded-full"
+              </a>
+              <a
+                href="#theme"
+                className="inline-flex items-center justify-center px-8 py-4 border border-white/70 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
               >
                 Explore Themes
-              </button>
+              </a>
             </motion.div>
           </motion.div>
 
-          {/* Tagline - Upper right */}
-          <motion.div
-            className="lg:col-span-5 flex justify-center lg:justify-end"
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
+          {/* Tagline - Upper Right */}
+          <motion.div 
+            className="lg:col-span-1 flex items-start justify-start lg:justify-end pt-8 lg:pt-16"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <div className="max-w-sm text-center lg:text-right lg:self-start lg:mt-20">
-              <p className="text-[clamp(1rem,2vw,1.5rem)] leading-[1.4] font-medium text-balance">
-                A Hackathon dedicated to agriculture enthusiasts
+            <div className="max-w-sm">
+              <p 
+                className="font-medium text-white/90 text-balance"
+                style={{ 
+                  fontSize: 'var(--font-size-tagline)',
+                  lineHeight: 'var(--line-height-tagline)'
+                }}
+              >
+                A hackathon dedicated to agriculture enthusiasts
               </p>
             </div>
           </motion.div>
