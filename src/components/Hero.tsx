@@ -155,18 +155,25 @@ export default function Hero() {
               variants={buttonVariants}
               className="flex flex-col sm:flex-row gap-4 mt-8 lg:mt-12"
             >
-              <a
+              {/* White Button */}
+              <motion.a
                 href="#about"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-lg hover:bg-neutral-200 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-medium tracking-wide transition-all duration-200 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 Register Now
-              </a>
-              <a
+              </motion.a>
+
+              {/* Black Button */}
+              <motion.a
                 href="#theme"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/70 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                className="inline-flex items-center justify-center px-8 py-4 bg-black text-white font-medium tracking-wide transition-all duration-200 hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 Explore Themes
-              </a>
+              </motion.a>
             </motion.div>
           </motion.div>
 
