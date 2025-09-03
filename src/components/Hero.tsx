@@ -40,6 +40,7 @@ const buttonVariants: Variants = {
 };
 
 export default function Hero() {
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const { user } = useAuth();
 
