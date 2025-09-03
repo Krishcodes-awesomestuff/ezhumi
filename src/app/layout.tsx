@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,11 +8,18 @@ const inter = Inter({
   display: "swap",
 });
 
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Ezhumi - Agriculture Hackathon",
   description: "A hackathon dedicated to agriculture enthusiasts. Hack. Seek. Cultivate.",
   keywords: "agriculture, hackathon, farming, technology, innovation",
-  authors: [{ name: "Ezhumi Team" }],
+  authors: [{ name: "Krishnaprasath" }],
   openGraph: {
     title: "Ezhumi - Agriculture Hackathon",
     description: "A hackathon dedicated to agriculture enthusiasts",
@@ -26,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <body className="font-inter bg-black text-white antialiased">
         {children}
       </body>

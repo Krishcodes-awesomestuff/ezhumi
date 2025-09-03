@@ -1,11 +1,22 @@
 @import "tailwindcss";
 
+/* Custom Font - NeueHaasGrotDispRound */
+@font-face {
+  font-family: 'NeueHaasGrotDispRound';
+  src: url('/font/NeueHaasGrotDispRound-75Bold-Trial.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --font-inter: var(--font-geist-sans);
+  --font-hero: var(--font-montserrat), system-ui, -apple-system, sans-serif;
 }
 
 @theme inline {
   --font-family-inter: var(--font-inter);
+  --font-family-hero: var(--font-hero);
   
   --font-size-hero: clamp(2.75rem, 6vw, 7rem);
   --line-height-hero: 0.95;

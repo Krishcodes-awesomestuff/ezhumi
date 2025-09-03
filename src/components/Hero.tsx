@@ -2,7 +2,6 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState } from 'react';
-import VerticalLines from './VerticalLines';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -83,11 +82,26 @@ export default function Hero() {
         />
       </div>
 
-      {/* Vertical Guide Lines */}
-      <VerticalLines />
-
       {/* Content Container */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Top Tagline */}
+        <motion.div 
+          className="pt-8 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          <p 
+            className="font-medium text-white/90 text-balance"
+            style={{ 
+              fontSize: 'var(--font-size-tagline)',
+              lineHeight: 'var(--line-height-tagline)'
+            }}
+          >
+            A hackathon dedicated to agriculture enthusiasts
+          </p>
+        </motion.div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start min-h-screen pt-24 lg:pt-32">
           
           {/* Hero Headlines - Left/Center */}
@@ -100,30 +114,36 @@ export default function Hero() {
             <div className="space-y-2 lg:space-y-4">
               <motion.h1 
                 variants={itemVariants}
-                className="font-extrabold tracking-tight text-white"
+                className="text-white tracking-tight font-bold"
                 style={{ 
+                  fontFamily: 'var(--font-hero)',
                   fontSize: 'var(--font-size-hero)',
-                  lineHeight: 'var(--line-height-hero)'
+                  lineHeight: 'var(--line-height-hero)',
+                  fontWeight: 700
                 }}
               >
                 Hack.
               </motion.h1>
               <motion.h1 
                 variants={itemVariants}
-                className="font-extrabold tracking-tight text-white"
+                className="text-white tracking-tight font-bold ml-8 md:ml-16"
                 style={{ 
+                  fontFamily: 'var(--font-hero)',
                   fontSize: 'var(--font-size-hero)',
-                  lineHeight: 'var(--line-height-hero)'
+                  lineHeight: 'var(--line-height-hero)',
+                  fontWeight: 700
                 }}
               >
                 Seek.
               </motion.h1>
               <motion.h1 
                 variants={itemVariants}
-                className="font-extrabold tracking-tight text-white"
+                className="text-white tracking-tight font-bold ml-16 md:ml-32"
                 style={{ 
+                  fontFamily: 'var(--font-hero)',
                   fontSize: 'var(--font-size-hero)',
-                  lineHeight: 'var(--line-height-hero)'
+                  lineHeight: 'var(--line-height-hero)',
+                  fontWeight: 700
                 }}
               >
                 Cultivate.
@@ -150,25 +170,8 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Tagline - Upper Right */}
-          <motion.div 
-            className="lg:col-span-1 flex items-start justify-start lg:justify-end pt-8 lg:pt-16"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <div className="max-w-sm">
-              <p 
-                className="font-medium text-white/90 text-balance"
-                style={{ 
-                  fontSize: 'var(--font-size-tagline)',
-                  lineHeight: 'var(--line-height-tagline)'
-                }}
-              >
-                A hackathon dedicated to agriculture enthusiasts
-              </p>
-            </div>
-          </motion.div>
+          {/* Right column space reserved for future content */}
+          <div className="lg:col-span-1"></div>
         </div>
       </div>
     </section>
