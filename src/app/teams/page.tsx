@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
-import { Users, User, Mail, Phone, GraduationCap, Plus, Calendar } from 'lucide-react';
+import { Users, User, Plus, Calendar } from 'lucide-react';
 
 interface Team {
   id: string;
@@ -31,12 +31,6 @@ export default function TeamsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (user) {
-      fetchTeams();
-    }
-  }, [user]);
-
   const fetchTeams = async () => {
     try {
       const { data, error } = await supabase
@@ -47,12 +41,19 @@ export default function TeamsPage() {
 
       if (error) throw error;
       setTeams(data || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch teams';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchTeams();
+    }
+  }, [user, fetchTeams]);
 
   // Redirect to login if not authenticated
   if (!user) {
@@ -135,7 +136,7 @@ export default function TeamsPage() {
             <Users className="w-24 h-24 mx-auto mb-6 text-white/30" />
             <h3 className="text-2xl font-medium text-white mb-4">No Teams Registered</h3>
             <p className="text-white/70 mb-8 max-w-md mx-auto">
-              You haven't registered any teams yet. Start by creating your first team for the hackathon.
+              You haven&apos;t registered any teams yet. Start by creating your first team for the hackathon.
             </p>
             <Link 
               href="/register-team"

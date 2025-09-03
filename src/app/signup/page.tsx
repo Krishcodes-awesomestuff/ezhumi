@@ -18,7 +18,6 @@ export default function SignupPage() {
   const [success, setSuccess] = useState(false);
   
   const { signUp } = useAuth();
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +61,7 @@ export default function SignupPage() {
           <div className="p-8 bg-white/5 border border-white/20 rounded-lg">
             <h2 className="text-2xl font-medium text-white mb-4">Check Your Email</h2>
             <p className="text-white/70 mb-6">
-              We've sent you a confirmation link at <strong>{email}</strong>. 
+              We&apos;ve sent you a confirmation link at <strong>{email}</strong>. 
               Please check your email and click the link to activate your account.
             </p>
             <Link 

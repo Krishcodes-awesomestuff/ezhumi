@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { Users, User, Mail, Phone, GraduationCap, Users2 } from 'lucide-react';
+import { Users, User, Users2 } from 'lucide-react';
 
 interface Participant {
   name: string;
@@ -27,7 +27,6 @@ interface TeamData {
 
 export default function RegisterTeamPage() {
   const { user } = useAuth();
-  const router = useRouter();
   
   const [formData, setFormData] = useState<TeamData>({
     teamName: '',
@@ -47,7 +46,7 @@ export default function RegisterTeamPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleInputChange = (field: keyof TeamData, value: any) => {
+  const handleInputChange = (field: keyof TeamData, value: string | number | Participant[]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -119,8 +118,9 @@ export default function RegisterTeamPage() {
       }
 
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while registering your team');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred while registering your team';
+      setError(errorMessage);
       setLoading(false);
     }
   };
@@ -171,8 +171,8 @@ export default function RegisterTeamPage() {
             <Users2 className="w-16 h-16 mx-auto mb-4 text-green-400" />
             <h2 className="text-2xl font-medium text-white mb-4">Team Registered Successfully!</h2>
             <p className="text-white/70 mb-6">
-              Your team "{formData.teamName}" has been registered for the hackathon. 
-              You'll receive confirmation details via email.
+              Your team &quot;{formData.teamName}&quot; has been registered for the hackathon. 
+              You&apos;ll receive confirmation details via email.
             </p>
             <Link 
               href="/"
