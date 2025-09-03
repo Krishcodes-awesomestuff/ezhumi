@@ -2,6 +2,8 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -41,6 +43,7 @@ const buttonVariants: Variants = {
 export default function Hero() {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const { user } = useAuth();
 
   return (
     <section 
@@ -157,12 +160,12 @@ export default function Hero() {
             >
               {/* White Button */}
               <motion.a
-                href="#about"
+                href={user ? "/register-team" : "/signup"}
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-medium tracking-wide transition-all duration-200 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Register Now
+                {user ? "Register Team" : "Register Now"}
               </motion.a>
 
               {/* Black Button */}

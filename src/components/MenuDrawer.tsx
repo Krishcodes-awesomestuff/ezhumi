@@ -1,9 +1,11 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, Users, LogIn, UserPlus } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLockBody } from '@/hooks/useLockBody';
+import { useAuth } from '@/contexts/AuthContext';
+import Link from 'next/link';
 
 interface MenuDrawerProps {
   isOpen: boolean;
@@ -21,6 +23,7 @@ export default function MenuDrawer({
   onSectionClick 
 }: MenuDrawerProps) {
   const firstLinkRef = useRef<HTMLButtonElement>(null);
+  const { user } = useAuth();
   
   useLockBody(isOpen);
 
@@ -105,6 +108,49 @@ export default function MenuDrawer({
                     </li>
                   ))}
                 </ul>
+
+                {/* Auth & Team Navigation */}
+                <div className="mt-8 pt-6 border-t border-white/20">
+                  {user ? (
+                    <div className="space-y-3">
+                      <Link
+                        href="/register-team"
+                        onClick={onClose}
+                        className="flex items-center gap-3 text-lg font-medium hover:text-white/70 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black rounded p-2"
+                      >
+                        <UserPlus className="w-5 h-5" />
+                        Register Team
+                      </Link>
+                      <Link
+                        href="/teams"
+                        onClick={onClose}
+                        className="flex items-center gap-3 text-lg font-medium hover:text-white/70 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black rounded p-2"
+                      >
+                        <Users className="w-5 h-5" />
+                        My Teams
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <Link
+                        href="/login"
+                        onClick={onClose}
+                        className="flex items-center gap-3 text-lg font-medium hover:text-white/70 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black rounded p-2"
+                      >
+                        <LogIn className="w-5 h-5" />
+                        Sign In
+                      </Link>
+                      <Link
+                        href="/signup"
+                        onClick={onClose}
+                        className="flex items-center gap-3 text-lg font-medium hover:text-white/70 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black rounded p-2"
+                      >
+                        <UserPlus className="w-5 h-5" />
+                        Sign Up
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </nav>
 
               {/* Language chips */}

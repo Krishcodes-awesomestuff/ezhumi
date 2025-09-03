@@ -1,7 +1,9 @@
 'use client';
 
-import { Menu } from 'lucide-react';
+import { Menu, User, LogOut } from 'lucide-react';
 import { useState } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 import MenuDrawer from './MenuDrawer';
 
 const sections = [
@@ -16,6 +18,7 @@ const languages = ['Hi', 'En', 'Ta'];
 
 export default function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -54,8 +57,31 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Menu button */}
-          <div className="pointer-events-auto">
+          {/* Auth buttons / Menu button */}
+          <div className="pointer-events-auto flex items-center gap-3">
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded">
+                  <User className="w-4 h-4" />
+                  <span className="text-sm font-medium">{user.email}</span>
+                </div>
+                <button
+                  onClick={signOut}
+                  className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+                  title="Sign out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm font-medium tracking-wide uppercase border border-white/70 hover:bg-white/10 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+              >
+                Login
+              </Link>
+            )}
+            
             <button
               onClick={() => setIsDrawerOpen(true)}
               className="border border-white/70 px-4 py-2 text-sm font-medium tracking-wide uppercase hover:bg-white/10 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"

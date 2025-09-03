@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
+import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -35,7 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <body className="font-inter bg-black text-white antialiased">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
