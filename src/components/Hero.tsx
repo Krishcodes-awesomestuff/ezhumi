@@ -40,7 +40,6 @@ const buttonVariants: Variants = {
 };
 
 export default function Hero() {
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const { user } = useAuth();
 
@@ -57,10 +56,7 @@ export default function Hero() {
             muted
             loop
             playsInline
-            poster="/media/hero-poster.jpg"
             className="absolute inset-0 w-full h-full object-cover"
-            onLoadStart={() => setVideoLoaded(false)}
-            onCanPlay={() => setVideoLoaded(true)}
             onError={() => setVideoError(true)}
           >
             <source src="/media/hero.mp4" type="video/mp4" />
