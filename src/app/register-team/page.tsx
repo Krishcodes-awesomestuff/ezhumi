@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
 import { Users, User, Users2 } from 'lucide-react';
 
 interface Participant {
@@ -74,46 +73,17 @@ export default function RegisterTeamPage() {
     setError('');
 
     try {
-      // Prepare team data
-      const teamRecord = {
-        team_name: formData.teamName,
-        team_lead_name: formData.teamLeadName,
-        team_lead_email: formData.teamLeadEmail,
-        team_lead_phone: formData.teamLeadPhone,
-        team_lead_college: formData.teamLeadCollege,
-        team_size: formData.teamSize,
-        user_id: user?.id
-      };
+      const response = await fetch('/api/teams', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // Insert team record
-      const { data: team, error: teamError } = await supabase
-        .from('teams')
-        .insert([teamRecord])
-        .select()
-        .single();
-
-      if (teamError) throw teamError;
-
-      // Prepare participants data (only for team size > 1)
-      if (formData.teamSize > 1) {
-        const participantRecords = formData.participants
-          .slice(0, formData.teamSize - 1) // Exclude team lead
-          .filter(p => p.name.trim() !== '') // Only include filled participants
-          .map(participant => ({
-            team_id: team.id,
-            name: participant.name,
-            email: participant.email,
-            phone: participant.phone,
-            college: participant.college
-          }));
-
-        if (participantRecords.length > 0) {
-          const { error: participantsError } = await supabase
-            .from('participants')
-            .insert(participantRecords);
-
-          if (participantsError) throw participantsError;
-        }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to register team');
       }
 
       setSuccess(true);
@@ -154,7 +124,6 @@ export default function RegisterTeamPage() {
     );
   }
 
-  // Success state
   if (success) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center px-6">

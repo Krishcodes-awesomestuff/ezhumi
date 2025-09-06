@@ -4,18 +4,17 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
 import { Users, User, Plus, Calendar } from 'lucide-react';
 
 interface Team {
   id: string;
-  team_name: string;
-  team_lead_name: string;
-  team_lead_email: string;
-  team_lead_phone: string;
-  team_lead_college: string;
-  team_size: number;
-  created_at: string;
+  teamName: string;
+  teamLeadName: string;
+  teamLeadEmail: string;
+  teamLeadPhone: string;
+  teamLeadCollege: string;
+  teamSize: number;
+  createdAt: string;
   participants: Array<{
     id: string;
     name: string;
@@ -33,13 +32,11 @@ export default function TeamsPage() {
 
   const fetchTeams = useCallback(async () => {
     try {
-      const { data, error } = await supabase
-        .from('team_details')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const response = await fetch('/api/teams');
+      if (!response.ok) {
+        throw new Error('Failed to fetch teams');
+      }
+      const data = await response.json();
       setTeams(data || []);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch teams';
@@ -47,7 +44,7 @@ export default function TeamsPage() {
     } finally {
       setLoading(false);
     }
-  }, [user?.id]);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -162,15 +159,15 @@ export default function TeamsPage() {
                 {/* Team Header */}
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-medium text-white mb-2">{team.team_name}</h3>
+                    <h3 className="text-2xl font-medium text-white mb-2">{team.teamName}</h3>
                     <div className="flex items-center gap-4 text-white/70">
                       <div className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
-                        <span>{team.team_size} {team.team_size === 1 ? 'Member' : 'Members'}</span>
+                        <span>{team.teamSize} {team.teamSize === 1 ? 'Member' : 'Members'}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
-                        <span>Registered {new Date(team.created_at).toLocaleDateString()}</span>
+                        <span>Registered {new Date(team.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
                   </div>
@@ -185,19 +182,19 @@ export default function TeamsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-white/5 rounded-lg">
                     <div>
                       <p className="text-white/70 text-sm mb-1">Name</p>
-                      <p className="text-white font-medium">{team.team_lead_name}</p>
+                      <p className="text-white font-medium">{team.teamLeadName}</p>
                     </div>
                     <div>
                       <p className="text-white/70 text-sm mb-1">Email</p>
-                      <p className="text-white font-medium">{team.team_lead_email}</p>
+                      <p className="text-white font-medium">{team.teamLeadEmail}</p>
                     </div>
                     <div>
                       <p className="text-white/70 text-sm mb-1">Phone</p>
-                      <p className="text-white font-medium">{team.team_lead_phone}</p>
+                      <p className="text-white font-medium">{team.teamLeadPhone}</p>
                     </div>
                     <div>
                       <p className="text-white/70 text-sm mb-1">College</p>
-                      <p className="text-white font-medium">{team.team_lead_college}</p>
+                      <p className="text-white font-medium">{team.teamLeadCollege}</p>
                     </div>
                   </div>
                 </div>

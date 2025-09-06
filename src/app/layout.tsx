@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
+import { ClerkProvider } from '@clerk/nextjs';
 import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
 
@@ -34,12 +35,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
-      <body className="font-inter bg-black text-white antialiased">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
+        <body className="font-inter bg-black text-white antialiased">
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
